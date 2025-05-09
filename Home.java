@@ -112,81 +112,68 @@ public class Home {
     	        frame.setVisible(true);
     	    }
 
-    	    private static JPanel createProductCard(String title, String description, String stockStr, JTextArea receiptArea, ImageIcon image, double price) {
-    	        int initialStock = Integer.parseInt(stockStr.replaceAll("[^0-9]", ""));
-    	        Product product = new Product(title, description, initialStock);
+    private static JPanel createProductCard(String title, String description, String stockStr, JTextArea receiptArea, ImageIcon image, double price) {
+        int initialStock = Integer.parseInt(stockStr.replaceAll("[^0-9]", ""));
+        Product product = new Product(title, description, initialStock);
 
-    	        JPanel card = new JPanel(new BorderLayout());
-    	        card.setPreferredSize(new Dimension(230, 280));
-    	        card.setBackground(new Color(0xD3E4CD));
-    	        card.setBorder(BorderFactory.createCompoundBorder(
-    	                BorderFactory.createEmptyBorder(10, 10, 10, 10),
-    	                BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1)
-    	        ));
+        JPanel card = new JPanel(new BorderLayout());
+        card.setPreferredSize(new Dimension(230, 280));
+        card.setBackground(new Color(0xD3E4CD));
+        card.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(10, 10, 10, 10),
+                BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1)
+        ));
 
-    	        JLabel imageLabel = new JLabel(image);
-    	        imageLabel.setHorizontalAlignment(JLabel.CENTER);
-    	        imageLabel.setPreferredSize(new Dimension(125, 125));
-    	        card.add(imageLabel, BorderLayout.NORTH);
+        JLabel imageLabel = new JLabel(image);
+        imageLabel.setHorizontalAlignment(JLabel.CENTER);
+        imageLabel.setPreferredSize(new Dimension(125, 125));
+        card.add(imageLabel, BorderLayout.NORTH);
 
-    	        JPanel infoPanel = new JPanel();
-    	        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-    	        infoPanel.setBackground(new Color(0xD3E4CD));
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setBackground(new Color(0xD3E4CD));
 
-    	        JLabel priceLabel = new JLabel(String.format("₱ %.2f", price));
-    	        JLabel titleLabel = new JLabel(title);
-    	        JLabel descLabel = new JLabel(description);
-    	        JLabel stockLabel = new JLabel("Stocks " + product.stock);
-    	        JSpinner quantitySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 90, 1));
-    	        quantitySpinner.setMaximumSize(new Dimension(50, 25));
+        JLabel priceLabel = new JLabel(String.format("₱ %.2f", price));
+        JLabel titleLabel = new JLabel(title);
+        JLabel descLabel = new JLabel(description);
+        JLabel stockLabel = new JLabel("Stocks " + product.stock);
+        JSpinner quantitySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 90, 1));
+        quantitySpinner.setMaximumSize(new Dimension(50, 25));
 
-    	        JButton addButton = new JButton("Buy");
+        JButton addButton = new JButton("Buy");
 
-    	        priceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    	        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    	        descLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    	        stockLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    	        quantitySpinner.setAlignmentX(Component.CENTER_ALIGNMENT);
-    	        addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        priceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        descLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        stockLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        quantitySpinner.setAlignmentX(Component.CENTER_ALIGNMENT);
+        addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-    	        addButton.setBackground(new Color(0xFFA725));
-    	        addButton.setForeground(Color.BLACK);
-    	        addButton.setFocusPainted(false);
+        addButton.setBackground(new Color(0xFFA725));
+        addButton.setForeground(Color.BLACK);
+        addButton.setFocusPainted(false);
 
-    	        addButton.addActionListener(e -> {
-    	            int quantity = (Integer) quantitySpinner.getValue();
-    	            String[] responses = {"PWD", "SENIOR", "STUDENT"};
-    	            int choice = JOptionPane.showOptionDialog(
-    	                    null,
-    	                    "Choose Discount Type for:\n" + title + "\nQuantity: " + quantity,
-    	                    "Discount Options",
-    	                    JOptionPane.DEFAULT_OPTION,
-    	                    JOptionPane.QUESTION_MESSAGE,
-    	                    null,
-    	                    responses,
-    	                    responses[0]);
+        // Action for adding items to the cart
+        addButton.addActionListener(e -> {
+            int quantity = (Integer) quantitySpinner.getValue();
+            Purchase.addPurchase(new Purchase(title, quantity, price, "NONE"));
+            receiptArea.append(title + " x" + quantity + " | ₱ " + String.format("%.2f", price * quantity) + "\n");
+        });
 
-    	            if (choice >= 0) {
-    	                String selected = responses[choice];
-    	                Purchase.addPurchase(new Purchase(title, quantity, price, selected));
-    	                receiptArea.append(title + " x" + quantity + " - " + selected +
-    	                        " | ₱ " + String.format("%.2f", price * quantity) + "\n");
-    	            }
-    	        });
+        infoPanel.add(Box.createVerticalStrut(3));
+        infoPanel.add(priceLabel);
+        infoPanel.add(titleLabel);
+        infoPanel.add(descLabel);
+        infoPanel.add(stockLabel);
+        infoPanel.add(Box.createVerticalStrut(5));
+        infoPanel.add(quantitySpinner);
+        infoPanel.add(Box.createVerticalStrut(5));
+        infoPanel.add(addButton);
 
-    	        infoPanel.add(Box.createVerticalStrut(3));
-    	        infoPanel.add(priceLabel);
-    	        infoPanel.add(titleLabel);
-    	        infoPanel.add(descLabel);
-    	        infoPanel.add(stockLabel);
-    	        infoPanel.add(Box.createVerticalStrut(5));
-    	        infoPanel.add(quantitySpinner);
-    	        infoPanel.add(Box.createVerticalStrut(5));
-    	        infoPanel.add(addButton);
+        card.add(infoPanel, BorderLayout.CENTER);
+        return card;
+    }
 
-    	        card.add(infoPanel, BorderLayout.CENTER);
-    	        return card;
-    	    }
 
     	    private static void addTextFieldRow(JPanel container, String labelText) {
     	        JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -220,7 +207,10 @@ public class Home {
     	            button.addActionListener(e -> {
     	                receiptArea.setText("");
     	                receiptArea2.setText("");
-    	                purchases.clear();
+    	                Purchase.clearPurchases();
+    	                subtotalField.setText("");
+    	                discountedPriceField.setText("");
+    	                totalField.setText("");
     	            });
     	        } else if (text.equals("Total")) {
     	            button.addActionListener(e -> {
@@ -228,25 +218,41 @@ public class Home {
     	                double total = 0;
     	                double totalDiscounted = 0;
 
-    	                receiptArea2.setText(""); 
+    	                receiptArea2.setText("");
     	                receiptArea2.append("****** Art Supplies ********\n");
+
+    	                // Ask once for discount type
+    	                String[] responses = {"PWD", "SENIOR", "STUDENT", "NONE"};
+    	                String selected = (String) JOptionPane.showInputDialog(
+    	                        null,
+    	                        "Choose Discount Type for all items:",
+    	                        "Discount Options",
+    	                        JOptionPane.QUESTION_MESSAGE,
+    	                        null,
+    	                        responses,
+    	                        responses[0]);
+
+    	                if (selected == null) return; // Cancelled
+
+    	                double discountRate;
+    	                switch (selected.toUpperCase()) {
+    	                    case "PWD":
+    	                        discountRate = 0.20;
+    	                        break;
+    	                    case "SENIOR":
+    	                        discountRate = 0.15;
+    	                        break;
+    	                    case "STUDENT":
+    	                        discountRate = 0.10;
+    	                        break;
+    	                    default:
+    	                        discountRate = 0.0;
+    	                        break;
+    	                }
+
 
     	                for (Purchase p : Purchase.getPurchases()) {
     	                    double itemSubtotal = p.price * p.quantity;
-    	                    double discountRate = 0;
-
-    	                    switch (p.discountType.toUpperCase()) {
-    	                        case "PWD":
-    	                            discountRate = 0.20;
-    	                            break;
-    	                        case "STUDENT":
-    	                            discountRate = 0.10;
-    	                            break;
-    	                        case "SENIOR":
-    	                            discountRate = 0.15;
-    	                            break;
-    	                    }
-
     	                    double discountAmount = itemSubtotal * discountRate;
     	                    double itemTotal = itemSubtotal - discountAmount;
 
@@ -254,26 +260,22 @@ public class Home {
     	                    total += itemTotal;
     	                    totalDiscounted += discountAmount;
 
-    	                    receiptArea2.append(p.title + " x" + p.quantity + " - " + p.discountType +
+    	                    receiptArea2.append(p.title + " x" + p.quantity +
     	                            " | ₱" + String.format("%.2f", itemTotal) + "\n");
     	                }
 
     	                receiptArea2.append("\nTOTAL: ₱" + String.format("%.2f", total) + "\n");
     	                receiptArea2.append("*************************************");
 
-    	                // Set text fields
     	                subtotalField.setText(String.format("₱ %.2f", subtotal));
     	                discountedPriceField.setText(String.format("₱ %.2f", totalDiscounted));
     	                totalField.setText(String.format("₱ %.2f", total));
     	            });
     	        }
 
-
-    	        
-    	        
-
     	        return button;
     	    }
+
     	}
 
 

@@ -74,28 +74,90 @@ public class Home {
     	        scrollContent.setLayout(new BoxLayout(scrollContent, BoxLayout.Y_AXIS));
     	        scrollContent.setOpaque(false);
 
-    	        JLabel sectionLabel = new JLabel("Paper");
-    	        sectionLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
-    	        sectionLabel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
-    	        sectionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-    	        scrollContent.add(sectionLabel);
+    	        JLabel drawingMaterialsLabel = new JLabel("Drawing Materials");
+    	        drawingMaterialsLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
+    	        drawingMaterialsLabel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
+    	        drawingMaterialsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    	        scrollContent.add(drawingMaterialsLabel);
 
-    	        // Load and scale images
+    	        JPanel drawingMaterialsGrid = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+    	        drawingMaterialsGrid.setOpaque(false);
+    	        
     	        ImageIcon shortBondImg = new ImageIcon(Home.class.getResource("/furniture/short bond.jpg"));
     	        ImageIcon PastelImg = new ImageIcon(Home.class.getResource("/furniture/Pastel.jpg"));
     	        ImageIcon Kraft2Img = new ImageIcon(new ImageIcon(Home.class.getResource("/furniture/Kraft2.jpg")).getImage().getScaledInstance(210, 200, Image.SCALE_SMOOTH));
     	        ImageIcon Art2Img = new ImageIcon(new ImageIcon(Home.class.getResource("/furniture/Art2.jpg")).getImage().getScaledInstance(210, 200, Image.SCALE_SMOOTH));
     	        ImageIcon CrepeImg = new ImageIcon(new ImageIcon(Home.class.getResource("/furniture/Crepe.jpg")).getImage().getScaledInstance(210, 200, Image.SCALE_SMOOTH));
+    	        
+    	        drawingMaterialsGrid.add(createProductCard("Pastel Paper", "10 pcs", "Stocks 20", receiptArea, PastelImg, 80.00));
+    	        drawingMaterialsGrid.add(createProductCard("Short Bond Paper", "Hardcopy / 100 pcs", "Stocks 20", receiptArea, shortBondImg, 80.00));
+    	        drawingMaterialsGrid.add(createProductCard("Crêpe paper", "10 pcs", "Stocks 20", receiptArea, CrepeImg, 80.00));
+    	        drawingMaterialsGrid.add(createProductCard("Kraft paper", "10 pcs", "Stocks 20", receiptArea, Kraft2Img, 80.00));
+    	        drawingMaterialsGrid.add(createProductCard("Art paper", "10 pcs", "Stocks 20", receiptArea, Art2Img, 80.00));
 
-    	        JPanel productGrid = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
-    	        productGrid.setOpaque(false);
-    	        productGrid.add(createProductCard("Pastel Paper", "10 pcs", "Stocks 20", receiptArea, PastelImg, 60.00));
-    	        productGrid.add(createProductCard("Short Bond Paper", "Hardcopy / 100 pcs", "Stocks 20", receiptArea, shortBondImg, 250.00));
-    	        productGrid.add(createProductCard("Crêpe paper", "10 pcs", "Stocks 20", receiptArea, CrepeImg, 35.00));
-    	        productGrid.add(createProductCard("Kraft paper", "10 pcs", "Stocks 20", receiptArea, Kraft2Img, 75.00));
-    	        productGrid.add(createProductCard("Art paper", "10 pcs", "Stocks 20", receiptArea, Art2Img, 80.00));
+    	        scrollContent.add(drawingMaterialsGrid);
+    	        
+    	        //DrawingTools
+    	        JLabel drawingToolsLabel = new JLabel("Drawing Tools");
+    	        drawingToolsLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
+    	        drawingToolsLabel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
+    	        drawingToolsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    	        scrollContent.add(drawingToolsLabel);
 
-    	        scrollContent.add(productGrid);
+    	        JPanel drawingToolsGrid = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+    	        drawingToolsGrid.setOpaque(false);
+    	        
+    	        ImageIcon pencilImg = new ImageIcon(Home.class.getResource("/furniture/pencil.jpg"));
+    	        ImageIcon eraserImg = new ImageIcon(Home.class.getResource("/furniture/eraser.jpg"));
+    	        
+    	        drawingToolsGrid.add(createProductCard("Pencil", "10 pcs", "Stocks 20", receiptArea, pencilImg, 80.00));
+    	        drawingToolsGrid.add(createProductCard("Eraser", "Hardcopy / 100 pcs", "Stocks 20", receiptArea, eraserImg, 80.00));
+
+    	        scrollContent.add(drawingToolsGrid);
+    	        
+    	        //Painting Materials
+    	        JLabel paintingMaterialsLabel = new JLabel("Painting Materials");
+    	        paintingMaterialsLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
+    	        paintingMaterialsLabel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
+    	        paintingMaterialsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    	        scrollContent.add(paintingMaterialsLabel);
+
+    	        JPanel paintingMaterialsGrid = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+    	        paintingMaterialsGrid.setOpaque(false);
+    	        
+    	        ImageIcon watercolorImg = new ImageIcon(Home.class.getResource("/furniture/watercolor.jpg"));
+    	        ImageIcon oilpaintImg = new ImageIcon(Home.class.getResource("/furniture/oilpaint.jpg"));
+    	        ImageIcon acrylicImg = new ImageIcon(new ImageIcon(Home.class.getResource("/furniture/acrylic.jpg")).getImage().getScaledInstance(210, 200, Image.SCALE_SMOOTH));
+
+    	        
+    	        paintingMaterialsGrid.add(createProductCard("Watercolor", "10 pcs", "Stocks 20", receiptArea, watercolorImg, 80.00));
+    	        paintingMaterialsGrid.add(createProductCard("Oilpaint", "Hardcopy / 100 pcs", "Stocks 20", receiptArea, oilpaintImg, 80.00));
+    	        paintingMaterialsGrid.add(createProductCard("Acrylic", "10 pcs", "Stocks 20", receiptArea, acrylicImg, 80.00));
+
+    	        scrollContent.add(paintingMaterialsGrid);
+    	        
+    	        //Painting Tools
+    	        JLabel paintingToolsLabel = new JLabel("Painting Tools");
+    	        paintingToolsLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
+    	        paintingToolsLabel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
+    	        paintingToolsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    	        scrollContent.add(paintingToolsLabel);
+
+    	        JPanel paintingToolsGrid = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+    	        paintingToolsGrid.setOpaque(false);
+    	        
+    	        ImageIcon brushImg = new ImageIcon(Home.class.getResource("/furniture/brush.jpg"));
+    	        ImageIcon finebrushImg = new ImageIcon(Home.class.getResource("/furniture/finebrush.jpg"));
+    	        ImageIcon palleteknivesImg = new ImageIcon(Home.class.getResource("/furniture/palleteknives.jpg"));
+    	        ImageIcon roundbrushImg = new ImageIcon(new ImageIcon(Home.class.getResource("/furniture/roundbrush.jpg")).getImage().getScaledInstance(210, 200, Image.SCALE_SMOOTH));
+    	        
+    	        paintingToolsGrid.add(createProductCard("Brush", "10 pcs", "Stocks 20", receiptArea, brushImg, 80.00));
+    	        paintingToolsGrid.add(createProductCard("Finebrush", "10 pcs", "Stocks 20", receiptArea, finebrushImg, 80.00));
+    	        paintingToolsGrid.add(createProductCard("Pallete Knives", "Hardcopy / 100 pcs", "Stocks 20", receiptArea, palleteknivesImg, 80.00));
+    	        paintingToolsGrid.add(createProductCard("Roundbrush", "10 pcs", "Stocks 20", receiptArea, roundbrushImg, 80.00));
+
+    	        scrollContent.add(paintingToolsGrid);
+    	        
     	        JScrollPane scrollPane = new JScrollPane(scrollContent);
     	        scrollPane.setBorder(BorderFactory.createLineBorder(Color.GRAY));
     	        centerPanel.add(scrollPane, BorderLayout.CENTER);
@@ -277,5 +339,4 @@ public class Home {
     	    }
 
     	}
-
 

@@ -85,7 +85,7 @@ public class Home {
         drawingMaterialsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         scrollContent.add(drawingMaterialsLabel);
 
-        JPanel drawingMaterialsGrid = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        JPanel drawingMaterialsGrid = new JPanel(new GridLayout(0, 5, 20, 20));
         drawingMaterialsGrid.setOpaque(false);
         
         ImageIcon archesDPImg = loadAndResizeResourceImage("/furniture/Arches DP.jpg", 210, 200);
@@ -132,7 +132,7 @@ public class Home {
         drawingToolsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         scrollContent.add(drawingToolsLabel);
 
-        JPanel drawingToolsGrid = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        JPanel drawingToolsGrid = new JPanel(new GridLayout(0, 5, 20, 20));
         drawingToolsGrid.setOpaque(false);
         
         ImageIcon Cretacolor_CharBlenderImg = loadAndResizeResourceImage("/furniture/Cretacolor_CharBlender.jpg", 210, 200);
@@ -160,7 +160,7 @@ public class Home {
         paintingMaterialsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         scrollContent.add(paintingMaterialsLabel);
 
-        JPanel paintingMaterialsGrid = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        JPanel paintingMaterialsGrid = new JPanel(new GridLayout(0, 5, 20, 20));
         paintingMaterialsGrid.setOpaque(false);
         
         ImageIcon Arteza_APImg = loadAndResizeResourceImage("/furniture/Arteza_AP.jpg", 210, 200);
@@ -206,7 +206,7 @@ public class Home {
         paintingToolsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         scrollContent.add(paintingToolsLabel);
 
-        JPanel paintingToolsGrid = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        JPanel paintingToolsGrid = new JPanel(new GridLayout(0, 5, 20, 20));
         paintingToolsGrid.setOpaque(false);
         
         ImageIcon GamblinGamvarVarnishBrushImg = loadAndResizeResourceImage("/furniture/Gamblin Gamvar_Varnish Brush.jpg", 210, 200);

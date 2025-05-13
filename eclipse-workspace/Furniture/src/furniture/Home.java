@@ -113,15 +113,15 @@ public class Home {
         
         
         drawingMaterialsGrid.add(createProductCard("Arches Drawing Paper", "10 pcs", "Stocks 20", receiptArea, archesDPImg, 80.00));
-        drawingMaterialsGrid.add(createProductCard("Bruynzeel Colored Pencils", "10 pcs", "Stocks 20", receiptArea, bruynzeelCPImg, 80.00));
-        drawingMaterialsGrid.add(createProductCard("Derwent Pencils Inktense Color Pencil", "10 pcs", "Stocks 20", receiptArea, derwentInktenseCPImg, 80.00));
-        drawingMaterialsGrid.add(createProductCard("Prismacolor Premier Colored Pencils", "10 pcs", "Stocks 20", receiptArea, prismacolorPremierCPImg, 80.00));
-        drawingMaterialsGrid.add(createProductCard("Sennelier Pastel", "10 pcs", "Stocks 20", receiptArea, sennelierPastelImg, 80.00));
-        drawingMaterialsGrid.add(createProductCard("Staedtler Mars Graphite Pencils", "10 pcs", "Stocks 20", receiptArea, staedtlerMarsImg, 80.00));
-        drawingMaterialsGrid.add(createProductCard("Strathmore Drawing Paper", "100 pcs", "Stocks 20", receiptArea, strathmoreDPImg, 80.00));
-        drawingMaterialsGrid.add(createProductCard("Caran d'Ache Luminance Colored Pencils", "10 pcs", "Stocks 20", receiptArea, carandAcheLuminanceCPImg, 80.00));
-        drawingMaterialsGrid.add(createProductCard("Cretacolor Graphite and Charcoal Pencils", "10 pcs", "Stocks 20", receiptArea, cretacolorGnCPImg, 80.00));
-        drawingMaterialsGrid.add(createProductCard("Faber-Castell Polychromos Colored Pencils", "10 pcs", "Stocks 20", receiptArea, faberCastelPolychromosCPImg, 80.00));
+        drawingMaterialsGrid.add(createProductCard("Bruynzeel Colored Pencils", "10 pcs", "Stocks 20", receiptArea, bruynzeelCPImg, 120.00));
+        drawingMaterialsGrid.add(createProductCard("Derwent Pencils Inktense Color Pencil", "10 pcs", "Stocks 20", receiptArea, derwentInktenseCPImg, 110.00));
+        drawingMaterialsGrid.add(createProductCard("Prismacolor Premier Colored Pencils", "10 pcs", "Stocks 20", receiptArea, prismacolorPremierCPImg, 280.00));
+        drawingMaterialsGrid.add(createProductCard("Sennelier Pastel", "10 pcs", "Stocks 20", receiptArea, sennelierPastelImg, 120.00));
+        drawingMaterialsGrid.add(createProductCard("Staedtler Mars Graphite Pencils", "10 pcs", "Stocks 20", receiptArea, staedtlerMarsImg, 90.00));
+        drawingMaterialsGrid.add(createProductCard("Strathmore Drawing Paper", "100 pcs", "Stocks 20", receiptArea, strathmoreDPImg, 220.00));
+        drawingMaterialsGrid.add(createProductCard("Caran d'Ache Luminance Colored Pencils", "10 pcs", "Stocks 20", receiptArea, carandAcheLuminanceCPImg, 300.00));
+        drawingMaterialsGrid.add(createProductCard("Cretacolor Graphite and Charcoal Pencils", "10 pcs", "Stocks 20", receiptArea, cretacolorGnCPImg, 250.00));
+        drawingMaterialsGrid.add(createProductCard("Faber-Castell Polychromos Colored Pencils", "10 pcs", "Stocks 20", receiptArea, faberCastelPolychromosCPImg, 210.00));
 
         scrollContent.add(drawingMaterialsGrid);
         
@@ -147,9 +147,9 @@ public class Home {
         if (Sakura_EraserImg == null) Sakura_EraserImg = createPlaceholderIcon(210, 200);
         
         drawingToolsGrid.add(createProductCard("Cretacolor Charcoal Blender", "10 pcs", "Stocks 20", receiptArea, Cretacolor_CharBlenderImg, 80.00));
-        drawingToolsGrid.add(createProductCard("Derwent Blender Stumps", "100 pcs", "Stocks 20", receiptArea, Derwent_BStumpsImg, 80.00));
-        drawingToolsGrid.add(createProductCard("Prisma color Color Blender", "10 pcs", "Stocks 20", receiptArea, Prismacolor_CBlenderImg, 80.00));
-        drawingToolsGrid.add(createProductCard("Sakura Eraser", "10 pcs", "Stocks 20", receiptArea, Sakura_EraserImg, 80.00));
+        drawingToolsGrid.add(createProductCard("Derwent Blender Stumps", "100 pcs", "Stocks 20", receiptArea, Derwent_BStumpsImg, 90.00));
+        drawingToolsGrid.add(createProductCard("Prisma color Color Blender", "10 pcs", "Stocks 20", receiptArea, Prismacolor_CBlenderImg, 120.00));
+        drawingToolsGrid.add(createProductCard("Sakura Eraser", "10 pcs", "Stocks 20", receiptArea, Sakura_EraserImg, 50.00));
 
         scrollContent.add(drawingToolsGrid);
         
@@ -186,16 +186,16 @@ public class Home {
         if (Sennelier_WCImg == null) Sennelier_WCImg = createPlaceholderIcon(210, 200);
         if ( WinsorandNewton_OPImg == null)  WinsorandNewton_OPImg = createPlaceholderIcon(210, 200);
         
-        paintingMaterialsGrid.add(createProductCard("Arteza Acrylic Paint", "10 pcs", "Stocks 20", receiptArea, Arteza_APImg, 80.00));
-        paintingMaterialsGrid.add(createProductCard("Daniel Smith Watercolor", "100 pcs", "Stocks 20", receiptArea, DanielSmith_WCImg, 80.00));
-        paintingMaterialsGrid.add(createProductCard("Golden Medium", "10 pcs", "Stocks 20", receiptArea, Golden_mediumImg, 80.00));
-        paintingMaterialsGrid.add(createProductCard("Liquitex Acrylic Paint", "10 pcs", "Stocks 20", receiptArea, Liquitex_APImg, 80.00));
-        paintingMaterialsGrid.add(createProductCard("Maimeri Classico Oilpaint", "10 pcs", "Stocks 20", receiptArea, Maimeri_ClassicoOPImg, 80.00));
-        paintingMaterialsGrid.add(createProductCard("Mijello Mission Gold Watercolor", "10 pcs", "Stocks 20", receiptArea, Mijello_MissionGoldWCImg, 80.00));
-        paintingMaterialsGrid.add(createProductCard("Pebeo Oilpaint", "10 pcs", "Stocks 20", receiptArea, Pebeo_OPImg, 80.00));
-        paintingMaterialsGrid.add(createProductCard("Royal Talents Rembrandt Oilpaint", "10 pcs", "Stocks 20", receiptArea, RoyalTalens_RembrandtOPImg, 80.00));
-        paintingMaterialsGrid.add(createProductCard("Sennelier Watercolor", "10 pcs", "Stocks 20", receiptArea, Sennelier_WCImg, 80.00));
-        paintingMaterialsGrid.add(createProductCard("Winson & Newton Oilpaint", "10 pcs", "Stocks 20", receiptArea, WinsorandNewton_OPImg, 80.00));
+        paintingMaterialsGrid.add(createProductCard("Arteza Acrylic Paint", "10 pcs", "Stocks 20", receiptArea, Arteza_APImg, 100.00));
+        paintingMaterialsGrid.add(createProductCard("Daniel Smith Watercolor", "100 pcs", "Stocks 20", receiptArea, DanielSmith_WCImg, 90.00));
+        paintingMaterialsGrid.add(createProductCard("Golden Medium", "10 pcs", "Stocks 20", receiptArea, Golden_mediumImg, 110.00));
+        paintingMaterialsGrid.add(createProductCard("Liquitex Acrylic Paint", "10 pcs", "Stocks 20", receiptArea, Liquitex_APImg, 120.00));
+        paintingMaterialsGrid.add(createProductCard("Maimeri Classico Oilpaint", "10 pcs", "Stocks 20", receiptArea, Maimeri_ClassicoOPImg, 100.00));
+        paintingMaterialsGrid.add(createProductCard("Mijello Mission Gold Watercolor", "10 pcs", "Stocks 20", receiptArea, Mijello_MissionGoldWCImg, 150.00));
+        paintingMaterialsGrid.add(createProductCard("Pebeo Oilpaint", "10 pcs", "Stocks 20", receiptArea, Pebeo_OPImg, 95.00));
+        paintingMaterialsGrid.add(createProductCard("Royal Talents Rembrandt Oilpaint", "10 pcs", "Stocks 20", receiptArea, RoyalTalens_RembrandtOPImg, 180.00));
+        paintingMaterialsGrid.add(createProductCard("Sennelier Watercolor", "10 pcs", "Stocks 20", receiptArea, Sennelier_WCImg, 130.00));
+        paintingMaterialsGrid.add(createProductCard("Winson & Newton Oilpaint", "10 pcs", "Stocks 20", receiptArea, WinsorandNewton_OPImg, 105.00));
 
         scrollContent.add(paintingMaterialsGrid);
         
@@ -228,14 +228,14 @@ public class Home {
         if (RGM_WoodenPKImg == null) RGM_WoodenPKImg = createPlaceholderIcon(210, 200);
         if (SilverBrushGrandPrix_BristleBrushImg == null) SilverBrushGrandPrix_BristleBrushImg = createPlaceholderIcon(210, 200);
         
-        paintingToolsGrid.add(createProductCard("Gamblin Gamvar Varnish Brush", "10 pcs", "Stocks 20", receiptArea, GamblinGamvarVarnishBrushImg, 80.00));
-        paintingToolsGrid.add(createProductCard("Liquitex Pallete Knives", "10 pcs", "Stocks 20", receiptArea, Liquitex_PKImg, 80.00));
-        paintingToolsGrid.add(createProductCard("Mabef Easel", "Hardcopy / 100 pcs", "Stocks 20", receiptArea, Mabef_easelImg, 80.00));
-        paintingToolsGrid.add(createProductCard("Mimik Brush", "10 pcs", "Stocks 20", receiptArea, Mimik_BrushImg, 80.00));
-        paintingToolsGrid.add(createProductCard("Paasche Airbrush", "10 pcs", "Stocks 20", receiptArea, Paasche_AirbrushImg, 80.00));
-        paintingToolsGrid.add(createProductCard("Princeton Velvetouch Brush", "10 pcs", "Stocks 20", receiptArea, Princeton_VelvetouchBrushImg, 80.00));
-        paintingToolsGrid.add(createProductCard("RGM Wooden Pallete Knives", "10 pcs", "Stocks 20", receiptArea, RGM_WoodenPKImg, 80.00));
-        paintingToolsGrid.add(createProductCard("Silver Brush Grand Prix Bristle Brush", "10 pcs", "Stocks 20", receiptArea, SilverBrushGrandPrix_BristleBrushImg, 80.00));
+        paintingToolsGrid.add(createProductCard("Gamblin Gamvar Varnish Brush", "10 pcs", "Stocks 20", receiptArea, GamblinGamvarVarnishBrushImg, 100.00));
+        paintingToolsGrid.add(createProductCard("Liquitex Pallete Knives", "10 pcs", "Stocks 20", receiptArea, Liquitex_PKImg, 130.00));
+        paintingToolsGrid.add(createProductCard("Mabef Easel", "100 pcs", "Stocks 20", receiptArea, Mabef_easelImg, 160.00));
+        paintingToolsGrid.add(createProductCard("Mimik Brush", "10 pcs", "Stocks 20", receiptArea, Mimik_BrushImg, 120.00));
+        paintingToolsGrid.add(createProductCard("Paasche Airbrush", "10 pcs", "Stocks 20", receiptArea, Paasche_AirbrushImg, 200.00));
+        paintingToolsGrid.add(createProductCard("Princeton Velvetouch Brush", "10 pcs", "Stocks 20", receiptArea, Princeton_VelvetouchBrushImg, 160.00));
+        paintingToolsGrid.add(createProductCard("RGM Wooden Pallete Knives", "10 pcs", "Stocks 20", receiptArea, RGM_WoodenPKImg, 100.00));
+        paintingToolsGrid.add(createProductCard("Silver Brush Grand Prix Bristle Brush", "10 pcs", "Stocks 20", receiptArea, SilverBrushGrandPrix_BristleBrushImg, 145.00));
 
         scrollContent.add(paintingToolsGrid);
         

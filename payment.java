@@ -1,243 +1,263 @@
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.Random;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class PurchasingSystem extends JFrame {
-    CardLayout cardLayout;
-    JPanel mainPanel;
+public class PaymentPage extends JFrame {
+
+    private static final String CASH = "Cash on Delivery";
+    private static final String CARD = "Credit Card";
+    private static final String BANK = "Bank Transfer";
+    private static final String PAYMAYA = "PayMaya";
+
+    private double totalAmount;
+    private JComboBox<String> paymentMethodCombo;
+    private JPanel paymentDetailsPanel;
+    private JTabbedPane tabbedPane;
 
     
-    double totalAmount = 0;
-    String selectedPayment = "";
-    String paymentDetails = "";
+    private JTextArea receiptArea;
+    private JTextArea billArea;
+    private JTextField cardNumberField, expiryField, cvvField;
+    private JTextField bankNameField, accountNumberField;
+    private JTextField paymayaNumberField;
+    private JTextField nameField, addressField, contactField;
 
-    JTextArea receiptArea;
-
-    public PurchasingSystem() {
-        setTitle("Multi-Step Purchasing System");
-        setSize(600, 500);
+    public PaymentPage() {
+        setTitle("Air Supplies - Payment Page");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(900, 600);
+        setLocationRelativeTo(null);
 
-        cardLayout = new CardLayout();
-        mainPanel = new JPanel(cardLayout);
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBackground(new Color(0xFFF5E4));
+        setContentPane(mainPanel);
 
-        mainPanel.add(productPanel(), "product");
-        mainPanel.add(paymentMethodPanel(), "paymentMethod");
-        mainPanel.add(onlineFormPanel(), "onlineForm");
-        mainPanel.add(confirmationPanel(), "confirmation");
-        mainPanel.add(receiptPanel(), "receipt");
+        // TOP PANEL (Title)
+        JPanel topPanel = new JPanel();
+        topPanel.setBackground(new Color(0x6A9C89));
+        topPanel.setPreferredSize(new Dimension(100, 70));
+        topPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
+        JLabel titleLabel = new JLabel("Air Supplies");
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        titleLabel.setForeground(Color.WHITE);
+        topPanel.add(titleLabel);
+        mainPanel.add(topPanel, BorderLayout.NORTH);
 
-        add(mainPanel);
+        
+        tabbedPane = new JTabbedPane();
+        tabbedPane.setFont(new Font("SansSerif", Font.BOLD, 16));
+        mainPanel.add(tabbedPane, BorderLayout.CENTER);
+
+        // Payment Tab Content
+        JPanel paymentTab = new JPanel(new BorderLayout(10, 10));
+        paymentTab.setOpaque(false);
+
+        // Payment Method Selector
+        JPanel paymentSelectorPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        paymentMethodCombo = new JComboBox<>(new String[]{CASH, CARD, BANK, PAYMAYA});
+        paymentMethodCombo.addActionListener(e -> updatePaymentDetails());
+        paymentSelectorPanel.add(new JLabel("Select Payment Method:"));
+        paymentSelectorPanel.add(paymentMethodCombo);
+        paymentTab.add(paymentSelectorPanel, BorderLayout.NORTH);
+
+        // Payment Details Card Panel
+        paymentDetailsPanel = new JPanel(new CardLayout());
+        paymentDetailsPanel.add(getCashPanel(), CASH);
+        paymentDetailsPanel.add(getCardPanel(), CARD);
+        paymentDetailsPanel.add(getBankPanel(), BANK);
+        paymentDetailsPanel.add(getPayMayaPanel(), PAYMAYA);
+        paymentTab.add(paymentDetailsPanel, BorderLayout.CENTER);
+
+        // Confirm Payment Button
+        JButton confirmBtn = new JButton("Confirm Payment");
+        confirmBtn.addActionListener(e -> confirmPayment());
+        JPanel btnPanel = new JPanel();
+        btnPanel.add(confirmBtn);
+        paymentTab.add(btnPanel, BorderLayout.SOUTH);
+
+        tabbedPane.addTab("Payment", paymentTab);
+
+        // Receipt Tab Content
+        JPanel receiptTab = new JPanel(new BorderLayout(10, 10));
+        receiptTab.setBackground(new Color(0x6A9C89));
+        receiptTab.setForeground(Color.WHITE);
+
+        // Receipt title
+        JLabel receiptTitle = new JLabel("Receipt and Delivery Information");
+        receiptTitle.setFont(new Font("SansSerif", Font.BOLD, 20));
+        receiptTitle.setForeground(Color.WHITE);
+        receiptTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        receiptTitle.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+        receiptTab.add(receiptTitle, BorderLayout.NORTH);
+
+        // Receipt & Bill Text Areas
+        receiptArea = new JTextArea(10, 25);
+        receiptArea.setEditable(false);
+        receiptArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        receiptArea.setBackground(new Color(0xD0E6D7));
+        receiptArea.setBorder(BorderFactory.createTitledBorder("Receipt"));
+
+        billArea = new JTextArea(10, 25);
+        billArea.setEditable(false);
+        billArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        billArea.setBackground(new Color(0xD0E6D7));
+        billArea.setBorder(BorderFactory.createTitledBorder("Bill"));
+
+        JPanel receiptPanels = new JPanel();
+        receiptPanels.setOpaque(false);
+        receiptPanels.setLayout(new GridLayout(1, 2, 10, 10));
+        receiptPanels.add(new JScrollPane(receiptArea));
+        receiptPanels.add(new JScrollPane(billArea));
+        receiptTab.add(receiptPanels, BorderLayout.CENTER);
+
+
+        // Delivery info input panel
+        JPanel deliveryPanel = new JPanel(new GridLayout(3, 2, 5, 5));
+        deliveryPanel.setOpaque(false);
+        deliveryPanel.setBorder(BorderFactory.createTitledBorder("Delivery Information"));
+
+        deliveryPanel.add(new JLabel("Name:"));
+        nameField = new JTextField(20);
+        deliveryPanel.add(nameField);
+
+        deliveryPanel.add(new JLabel("Address:"));
+        addressField = new JTextField(20);
+        deliveryPanel.add(addressField);
+
+        deliveryPanel.add(new JLabel("Contact Number:"));
+        contactField = new JTextField(20);
+        deliveryPanel.add(contactField);
+
+        receiptTab.add(deliveryPanel, BorderLayout.SOUTH);
+
+        //Exit and Shop Again
+        JPanel receiptBtnPanel = new JPanel();
+        JButton exitBtn = new JButton("Exit");
+        JButton shopAgainBtn = new JButton("Shop Again");
+
+        exitBtn.addActionListener(e -> System.exit(0));
+
+        shopAgainBtn.addActionListener(e -> {
+            
+            resetAllFields();
+            tabbedPane.setSelectedIndex(0);
+        });
+
+        receiptBtnPanel.add(shopAgainBtn);
+        receiptBtnPanel.add(exitBtn);
+        receiptTab.add(receiptBtnPanel, BorderLayout.PAGE_END);
+
+        tabbedPane.addTab("Receipt", receiptTab);
+
+        updatePaymentDetails();
+
         setVisible(true);
     }
+    
+    public PaymentPage(double totalAmount) {
+        this.totalAmount = totalAmount;
+        
+    }
 
-    //Product selection
-    private JPanel productPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        JLabel title = new JLabel("Select Products", SwingConstants.CENTER);
-        panel.add(title, BorderLayout.NORTH);
+    private void updatePaymentDetails() {
+        String selected = (String) paymentMethodCombo.getSelectedItem();
+        CardLayout cl = (CardLayout) paymentDetailsPanel.getLayout();
+        cl.show(paymentDetailsPanel, selected);
+    }
 
-        JTextArea cartArea = new JTextArea(10, 30);
-        cartArea.setEditable(false);
-        JPanel center = new JPanel();
-        String[] items = {"Paper - $10", "Ink - $20", "Pen - $5"};
-        int[] prices = {10, 20, 5};
-        for (int i = 0; i < items.length; i++) {
-            final int index = i; 
-            int price = prices[index];
-            JButton btn = new JButton(items[index]);
-            btn.addActionListener(e -> {
-                cartArea.append(items[index] + "\n");
-                totalAmount += price;
-            });
-            center.add(btn);
-        }
-
-
-        panel.add(center, BorderLayout.CENTER);
-        panel.add(new JScrollPane(cartArea), BorderLayout.EAST);
-
-        JButton calcBtn = new JButton("Calculate Total & Continue");
-        calcBtn.addActionListener(e -> {
-            cardLayout.show(mainPanel, "paymentMethod");
-        });
-
-        panel.add(calcBtn, BorderLayout.SOUTH);
+    private JPanel getCashPanel() {
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Cash on Delivery selected. Please prepare cash."));
         return panel;
     }
 
-    //payment method
-    private JPanel paymentMethodPanel() {
-        JPanel panel = new JPanel(new GridLayout(4, 1));
-        JLabel label = new JLabel("Choose Payment Method", SwingConstants.CENTER);
-        panel.add(label);
-
-        JButton cod = new JButton("Cash on Delivery");
-        JButton online = new JButton("Online Transaction");
-
-        cod.addActionListener(e -> {
-            selectedPayment = "Cash on Delivery";
-            cardLayout.show(mainPanel, "confirmation");
-        });
-
-        online.addActionListener(e -> {
-            selectedPayment = "Online Transaction";
-            cardLayout.show(mainPanel, "onlineForm");
-        });
-
-        panel.add(cod);
-        panel.add(online);
+    private JPanel getCardPanel() {
+        JPanel panel = new JPanel(new GridLayout(3, 2, 5, 5));
+        panel.add(new JLabel("Card Number:"));
+        cardNumberField = new JTextField(15);
+        panel.add(cardNumberField);
+        panel.add(new JLabel("Expiry Date:"));
+        expiryField = new JTextField(7);
+        panel.add(expiryField);
+        panel.add(new JLabel("CVV:"));
+        cvvField = new JTextField(4);
+        panel.add(cvvField);
         return panel;
     }
 
-    //Online payment form
-    private JPanel onlineFormPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-
-        JLabel label = new JLabel("Select Online Payment Method", SwingConstants.CENTER);
-        panel.add(label, BorderLayout.NORTH);
-
-        JPanel options = new JPanel();
-        JButton credit = new JButton("Credit Card");
-        JButton bank = new JButton("Bank");
-        JButton paymaya = new JButton("PayMaya");
-
-        options.add(credit);
-        options.add(bank);
-        options.add(paymaya);
-        panel.add(options, BorderLayout.CENTER);
-
-        credit.addActionListener(e -> showForm("Credit Card"));
-        bank.addActionListener(e -> showForm("Bank"));
-        paymaya.addActionListener(e -> showForm("PayMaya"));
-
+    private JPanel getBankPanel() {
+        JPanel panel = new JPanel(new GridLayout(2, 2, 5, 5));
+        panel.add(new JLabel("Bank Name:"));
+        bankNameField = new JTextField(15);
+        panel.add(bankNameField);
+        panel.add(new JLabel("Account Number:"));
+        accountNumberField = new JTextField(15);
+        panel.add(accountNumberField);
         return panel;
     }
 
-    private void showForm(String method) {
-        JFrame formFrame = new JFrame(method + " Info");
-        formFrame.setSize(300, 300);
-        JPanel form = new JPanel(new GridLayout(7, 1));
+    private JPanel getPayMayaPanel() {
+        JPanel panel = new JPanel(new GridLayout(1, 2, 5, 5));
+        panel.add(new JLabel("PayMaya Number:"));
+        paymayaNumberField = new JTextField(15);
+        panel.add(paymayaNumberField);
+        return panel;
+    }
 
-        JTextField field1 = new JTextField();
-        JTextField field2 = new JTextField();
-        JTextField field3 = new JTextField();
+    private void confirmPayment() {
+        // Collect payment details
+        String method = (String) paymentMethodCombo.getSelectedItem();
+        String paymentInfo = "";
+        String billText = String.format("Item(s): Art Supplies\nTotal Amount: ₱%.2f", totalAmount);
 
-        form.add(new JLabel(method + " Payment Form"));
 
         switch (method) {
-            case "Credit Card":
-                form.add(new JLabel("Card Holder Name"));
-                form.add(field1);
-                form.add(new JLabel("Card Number"));
-                form.add(field2);
-                form.add(new JLabel("CVV"));
-                form.add(field3);
+            case CASH:
+                paymentInfo = "Payment Method: Cash on Delivery";
                 break;
-            case "Bank":
-                form.add(new JLabel("Bank Name"));
-                form.add(field1);
-                form.add(new JLabel("Account Number"));
-                form.add(field2);
-                form.add(new JLabel("Account Holder Name"));
-                form.add(field3);
+            case CARD:
+                paymentInfo = String.format("Payment Method: Credit Card%nCard Number: %s%nExpiry: %s%nCVV: %s",
+                        cardNumberField.getText(), expiryField.getText(), cvvField.getText());
                 break;
-            case "PayMaya":
-                form.add(new JLabel("Account Name"));
-                form.add(field1);
-                form.add(new JLabel("Phone Number"));
-                form.add(field2);
+            case BANK:
+                paymentInfo = String.format("Payment Method: Bank Transfer%nBank Name: %s%nAccount Number: %s",
+                        bankNameField.getText(), accountNumberField.getText());
+                break;
+            case PAYMAYA:
+                paymentInfo = String.format("Payment Method: PayMaya%nPayMaya Number: %s",
+                        paymayaNumberField.getText());
                 break;
         }
 
-        JButton proceed = new JButton("Proceed");
-        proceed.addActionListener(e -> {
-            
-            if ((method.equals("Credit Card") || method.equals("Bank")) &&
-                (field1.getText().trim().isEmpty() || field2.getText().trim().isEmpty() || field3.getText().trim().isEmpty())) {
-                JOptionPane.showMessageDialog(formFrame, "Error: Please fill all fields.", "Validation Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            } else if (method.equals("PayMaya") &&
-                (field1.getText().trim().isEmpty() || field2.getText().trim().isEmpty())) {
-                JOptionPane.showMessageDialog(formFrame, "Error: Please fill all fields.", "Validation Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+        
+        String receiptText = "Thank you for your purchase!\n\n" + paymentInfo;
+        String billText1 = String.format("Item(s): Art Supplies\nTotal Amount: ₱%.2f", totalAmount);
 
-            
-            paymentDetails = method + " Info:\n" +
-                    field1.getText() + "\n" +
-                    field2.getText() + "\n" +
-                    (field3.getText().isEmpty() ? "" : field3.getText());
-            formFrame.dispose();
-            cardLayout.show(mainPanel, "confirmation");
-        });
+        receiptArea.setText(receiptText);
+        billArea.setText(billText1);
 
-        form.add(proceed);
-        formFrame.add(form);
-        formFrame.setVisible(true);
+        
+        tabbedPane.setSelectedIndex(1);
     }
 
-    //Confirmation
-    private JPanel confirmationPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        JTextArea summary = new JTextArea();
-        summary.setEditable(false);
-
-        JButton next = new JButton("Continue to Receipt");
-
-        next.addActionListener(e -> {
-            String ref = "TXN" + new Random().nextInt(999999);
-            receiptArea.setText("Reference No: " + ref + "\n");
-            receiptArea.append("Payment Method: " + selectedPayment + "\n");
-            if (!paymentDetails.isEmpty()) {
-                receiptArea.append(paymentDetails + "\n");
-            }
-            receiptArea.append("Total: $" + totalAmount);
-            cardLayout.show(mainPanel, "receipt");
-        });
-
-        panel.add(new JLabel("Confirm Your Payment Info", SwingConstants.CENTER), BorderLayout.NORTH);
-        panel.add(summary, BorderLayout.CENTER);
-        panel.add(next, BorderLayout.SOUTH);
-
-        panel.addComponentListener(new ComponentAdapter() {
-            public void componentShown(ComponentEvent e) {
-                summary.setText("Payment Method: " + selectedPayment + "\n");
-                summary.append("Total: $" + totalAmount + "\n");
-                if (!paymentDetails.isEmpty()) {
-                    summary.append("Details:\n" + paymentDetails + "\n");
-                }
-            }
-        });
-
-        return panel;
-    }
-
-    //Receipt
-    private JPanel receiptPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        receiptArea = new JTextArea();
-        receiptArea.setEditable(false);
-
-        JButton finish = new JButton("Finish Purchase");
-        finish.addActionListener(e -> JOptionPane.showMessageDialog(this, "Purchase Complete!"));
-
-        panel.add(new JScrollPane(receiptArea), BorderLayout.CENTER);
-        panel.add(finish, BorderLayout.SOUTH);
-        return panel;
+    private void resetAllFields() {
+        cardNumberField.setText("");
+        expiryField.setText("");
+        cvvField.setText("");
+        bankNameField.setText("");
+        accountNumberField.setText("");
+        paymayaNumberField.setText("");
+        nameField.setText("");
+        addressField.setText("");
+        contactField.setText("");
+        paymentMethodCombo.setSelectedIndex(0);
+        updatePaymentDetails();
+        receiptArea.setText("");
+        billArea.setText("");
     }
 
     public static void main(String[] args) {
-        new PurchasingSystem();
+        SwingUtilities.invokeLater(PaymentPage::new);
     }
-        
-     
-            
 }
-
-
-
-
-

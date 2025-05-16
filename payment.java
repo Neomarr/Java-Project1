@@ -1,9 +1,5 @@
-package purchasing;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class PaymentPage extends JFrame {
 
@@ -13,11 +9,12 @@ public class PaymentPage extends JFrame {
     private static final String PAYMAYA = "PayMaya";
 
     private double totalAmount;
+    private String cartDetails;
+
     private JComboBox<String> paymentMethodCombo;
     private JPanel paymentDetailsPanel;
     private JTabbedPane tabbedPane;
 
-    
     private JTextArea receiptArea;
     private JTextArea billArea;
     private JTextField cardNumberField, expiryField, cvvField;
@@ -25,7 +22,13 @@ public class PaymentPage extends JFrame {
     private JTextField paymayaNumberField;
     private JTextField nameField, addressField, contactField;
 
-    public PaymentPage() {
+    public PaymentPage(String cartDetails, double totalAmount) {
+        this.cartDetails = cartDetails;
+        this.totalAmount = totalAmount;
+        initUI();
+    }
+
+    private void initUI() {
         setTitle("Air Supplies - Payment Page");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 600);
@@ -35,7 +38,6 @@ public class PaymentPage extends JFrame {
         mainPanel.setBackground(new Color(0xFFF5E4));
         setContentPane(mainPanel);
 
-        // TOP PANEL (Title)
         JPanel topPanel = new JPanel();
         topPanel.setBackground(new Color(0x6A9C89));
         topPanel.setPreferredSize(new Dimension(100, 70));
@@ -46,16 +48,13 @@ public class PaymentPage extends JFrame {
         topPanel.add(titleLabel);
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
-        
         tabbedPane = new JTabbedPane();
         tabbedPane.setFont(new Font("SansSerif", Font.BOLD, 16));
         mainPanel.add(tabbedPane, BorderLayout.CENTER);
 
-        // Payment Tab Content
         JPanel paymentTab = new JPanel(new BorderLayout(10, 10));
         paymentTab.setOpaque(false);
 
-        // Payment Method Selector
         JPanel paymentSelectorPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         paymentMethodCombo = new JComboBox<>(new String[]{CASH, CARD, BANK, PAYMAYA});
         paymentMethodCombo.addActionListener(e -> updatePaymentDetails());
@@ -63,7 +62,6 @@ public class PaymentPage extends JFrame {
         paymentSelectorPanel.add(paymentMethodCombo);
         paymentTab.add(paymentSelectorPanel, BorderLayout.NORTH);
 
-        // Payment Details Card Panel
         paymentDetailsPanel = new JPanel(new CardLayout());
         paymentDetailsPanel.add(getCashPanel(), CASH);
         paymentDetailsPanel.add(getCardPanel(), CARD);
@@ -71,7 +69,6 @@ public class PaymentPage extends JFrame {
         paymentDetailsPanel.add(getPayMayaPanel(), PAYMAYA);
         paymentTab.add(paymentDetailsPanel, BorderLayout.CENTER);
 
-        // Confirm Payment Button
         JButton confirmBtn = new JButton("Confirm Payment");
         confirmBtn.addActionListener(e -> confirmPayment());
         JPanel btnPanel = new JPanel();
@@ -80,12 +77,10 @@ public class PaymentPage extends JFrame {
 
         tabbedPane.addTab("Payment", paymentTab);
 
-        // Receipt Tab Content
         JPanel receiptTab = new JPanel(new BorderLayout(10, 10));
         receiptTab.setBackground(new Color(0x6A9C89));
         receiptTab.setForeground(Color.WHITE);
 
-        // Receipt title
         JLabel receiptTitle = new JLabel("Receipt and Delivery Information");
         receiptTitle.setFont(new Font("SansSerif", Font.BOLD, 20));
         receiptTitle.setForeground(Color.WHITE);
@@ -93,7 +88,6 @@ public class PaymentPage extends JFrame {
         receiptTitle.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
         receiptTab.add(receiptTitle, BorderLayout.NORTH);
 
-        // Receipt & Bill Text Areas
         receiptArea = new JTextArea(10, 25);
         receiptArea.setEditable(false);
         receiptArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
@@ -113,8 +107,6 @@ public class PaymentPage extends JFrame {
         receiptPanels.add(new JScrollPane(billArea));
         receiptTab.add(receiptPanels, BorderLayout.CENTER);
 
-
-        // Delivery info input panel
         JPanel deliveryPanel = new JPanel(new GridLayout(3, 2, 5, 5));
         deliveryPanel.setOpaque(false);
         deliveryPanel.setBorder(BorderFactory.createTitledBorder("Delivery Information"));
@@ -133,7 +125,6 @@ public class PaymentPage extends JFrame {
 
         receiptTab.add(deliveryPanel, BorderLayout.SOUTH);
 
-        //Exit and Shop Again
         JPanel receiptBtnPanel = new JPanel();
         JButton exitBtn = new JButton("Exit");
         JButton shopAgainBtn = new JButton("Shop Again");
@@ -141,7 +132,6 @@ public class PaymentPage extends JFrame {
         exitBtn.addActionListener(e -> System.exit(0));
 
         shopAgainBtn.addActionListener(e -> {
-            
             resetAllFields();
             tabbedPane.setSelectedIndex(0);
         });
@@ -155,11 +145,6 @@ public class PaymentPage extends JFrame {
         updatePaymentDetails();
 
         setVisible(true);
-    }
-    
-    public PaymentPage(double totalAmount) {
-        this.totalAmount = totalAmount;
-        
     }
 
     private void updatePaymentDetails() {
@@ -208,38 +193,36 @@ public class PaymentPage extends JFrame {
     }
 
     private void confirmPayment() {
-        // Collect payment details
         String method = (String) paymentMethodCombo.getSelectedItem();
         String paymentInfo = "";
-        String billText = String.format("Item(s): Art Supplies\nTotal Amount: ₱%.2f", totalAmount);
-
 
         switch (method) {
             case CASH:
                 paymentInfo = "Payment Method: Cash on Delivery";
                 break;
             case CARD:
-                paymentInfo = String.format("Payment Method: Credit Card%nCard Number: %s%nExpiry: %s%nCVV: %s",
+                paymentInfo = String.format("Payment Method: Credit Card\nCard Number: %s\nExpiry: %s\nCVV: %s",
                         cardNumberField.getText(), expiryField.getText(), cvvField.getText());
                 break;
             case BANK:
-                paymentInfo = String.format("Payment Method: Bank Transfer%nBank Name: %s%nAccount Number: %s",
+                paymentInfo = String.format("Payment Method: Bank Transfer\nBank Name: %s\nAccount Number: %s",
                         bankNameField.getText(), accountNumberField.getText());
                 break;
             case PAYMAYA:
-                paymentInfo = String.format("Payment Method: PayMaya%nPayMaya Number: %s",
+                paymentInfo = String.format("Payment Method: PayMaya\nPayMaya Number: %s",
                         paymayaNumberField.getText());
                 break;
         }
 
-        
-        String receiptText = "Thank you for your purchase!\n\n" + paymentInfo;
-        String billText1 = String.format("Item(s): Art Supplies\nTotal Amount: ₱%.2f", totalAmount);
+        String deliveryInfo = String.format("Name: %s\nAddress: %s\nContact: %s",
+                nameField.getText(), addressField.getText(), contactField.getText());
+
+        String receiptText = "Thank you for your purchase!\n\n" + paymentInfo + "\n\n" + deliveryInfo;
+        String billText = String.format("Item(s): %s\nTotal Amount: ₱%.2f", cartDetails, totalAmount);
 
         receiptArea.setText(receiptText);
-        billArea.setText(billText1);
+        billArea.setText(billText);
 
-        
         tabbedPane.setSelectedIndex(1);
     }
 
@@ -257,9 +240,5 @@ public class PaymentPage extends JFrame {
         updatePaymentDetails();
         receiptArea.setText("");
         billArea.setText("");
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(PaymentPage::new);
     }
 }

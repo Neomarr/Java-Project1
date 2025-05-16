@@ -9,7 +9,72 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Home {
+	
+	// Database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/air_supplies"; // Replace with your database name
+    private static final String DB_USER = "root"; // Replace with your MySQL username
+    private static final String DB_PASSWORD = "Jovelicious!091996"; // Replace with your MySQL password
+
+    // Method to establish a connection to the database
+    public static Connection getConnection() {
+        try {
+            return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to connect to the database.", "Database Connection Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    // Example method to fetch products from the database
+    public static void fetchProducts() {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = getConnection();
+            if (conn == null) return;
+
+            String query = "SELECT p.product_name, p.description, c.category_name, i.quantity_in_stock, p.price " +
+                           "FROM products p " +
+                           "JOIN categories c ON p.category_id = c.category_id " +
+                           "JOIN inventory i ON p.product_id = i.product_id " +
+                           "ORDER BY c.category_name, p.product_name";
+
+            stmt = conn.prepareStatement(query);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String productName = rs.getString("product_name");
+                String description = rs.getString("description");
+                String categoryName = rs.getString("category_name");
+                int stock = rs.getInt("quantity_in_stock");
+                double price = rs.getDouble("price");
+
+                System.out.printf("Product: %s | Category: %s | Stock: %d | Price: %.2f\n", productName, categoryName, stock, price);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error fetching products from the database.", "Database Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
     private static JTextField discountedPriceField;
     private static JTextField subtotalField;
     private static JTextField totalField;
@@ -112,16 +177,17 @@ public class Home {
         if (faberCastelPolychromosCPImg == null) faberCastelPolychromosCPImg = createPlaceholderIcon(210, 200);
         
         
-        drawingMaterialsGrid.add(createProductCard("Arches Drawing Paper", "10 pcs", "Stocks 20", receiptArea, archesDPImg, 80.00));
-        drawingMaterialsGrid.add(createProductCard("Bruynzeel Colored Pencils", "10 pcs", "Stocks 20", receiptArea, bruynzeelCPImg, 120.00));
-        drawingMaterialsGrid.add(createProductCard("Derwent Pencils Inktense Color Pencil", "10 pcs", "Stocks 20", receiptArea, derwentInktenseCPImg, 110.00));
-        drawingMaterialsGrid.add(createProductCard("Prismacolor Premier Colored Pencils", "10 pcs", "Stocks 20", receiptArea, prismacolorPremierCPImg, 280.00));
-        drawingMaterialsGrid.add(createProductCard("Sennelier Pastel", "10 pcs", "Stocks 20", receiptArea, sennelierPastelImg, 120.00));
-        drawingMaterialsGrid.add(createProductCard("Staedtler Mars Graphite Pencils", "10 pcs", "Stocks 20", receiptArea, staedtlerMarsImg, 90.00));
+        drawingMaterialsGrid.add(createProductCard("Arches Drawing Paper", "10 pcs of drawing paper", "Stocks 20", receiptArea, archesDPImg, 80.00));
+        drawingMaterialsGrid.add(createProductCard("Bruynzeel Colored Pencils", "32 pcs of colored pencils", "Stocks 20", receiptArea, bruynzeelCPImg, 120.00));
+        drawingMaterialsGrid.add(createProductCard("Derwent Pencils Inktense Color Pencil", "12 pcs of colored pencils", "Stocks 20", receiptArea, derwentInktenseCPImg, 110.00));
+        drawingMaterialsGrid.add(createProductCard("Prismacolor Premier Colored Pencils", "120 pcs of colored pencils", "Stocks 20", receiptArea, prismacolorPremierCPImg, 280.00));
+        drawingMaterialsGrid.add(createProductCard("Sennelier Pastel", "48 pcs of pastels", "Stocks 20", receiptArea, sennelierPastelImg, 120.00));
+        drawingMaterialsGrid.add(createProductCard("Staedtler Mars Graphite Pencils", "8 pcs of pencils", "Stocks 20", receiptArea, staedtlerMarsImg, 90.00));
         drawingMaterialsGrid.add(createProductCard("Strathmore Drawing Paper", "100 pcs", "Stocks 20", receiptArea, strathmoreDPImg, 220.00));
-        drawingMaterialsGrid.add(createProductCard("Caran d'Ache Luminance Colored Pencils", "10 pcs", "Stocks 20", receiptArea, carandAcheLuminanceCPImg, 300.00));
-        drawingMaterialsGrid.add(createProductCard("Cretacolor Graphite and Charcoal Pencils", "10 pcs", "Stocks 20", receiptArea, cretacolorGnCPImg, 250.00));
-        drawingMaterialsGrid.add(createProductCard("Faber-Castell Polychromos Colored Pencils", "10 pcs", "Stocks 20", receiptArea, faberCastelPolychromosCPImg, 210.00));
+        drawingMaterialsGrid.add(createProductCard("Caran d'Ache Luminance Colored Pencils", "90 pcs of colored pencils", "Stocks 20", receiptArea, carandAcheLuminanceCPImg, 300.00));
+        drawingMaterialsGrid.add(createProductCard("Cretacolor Graphite and Charcoal Pencils", "20 pcs of charcoal pencils", "Stocks 20", receiptArea, cretacolorGnCPImg, 250.00));
+        drawingMaterialsGrid.add(createProductCard("Faber-Castell Polychromos Colored Pencils", "200 pcs of colored pencils", "Stocks 20", receiptArea, faberCastelPolychromosCPImg, 210.00));
+
 
         scrollContent.add(drawingMaterialsGrid);
         
@@ -146,10 +212,11 @@ public class Home {
         if (Prismacolor_CBlenderImg == null) Prismacolor_CBlenderImg = createPlaceholderIcon(210, 200);
         if (Sakura_EraserImg == null) Sakura_EraserImg = createPlaceholderIcon(210, 200);
         
-        drawingToolsGrid.add(createProductCard("Cretacolor Charcoal Blender", "10 pcs", "Stocks 20", receiptArea, Cretacolor_CharBlenderImg, 80.00));
-        drawingToolsGrid.add(createProductCard("Derwent Blender Stumps", "100 pcs", "Stocks 20", receiptArea, Derwent_BStumpsImg, 90.00));
-        drawingToolsGrid.add(createProductCard("Prisma color Color Blender", "10 pcs", "Stocks 20", receiptArea, Prismacolor_CBlenderImg, 120.00));
-        drawingToolsGrid.add(createProductCard("Sakura Eraser", "10 pcs", "Stocks 20", receiptArea, Sakura_EraserImg, 50.00));
+        drawingToolsGrid.add(createProductCard("Cretacolor Charcoal Blender", "10 pcs of charcoal blender", "Stocks 20", receiptArea, Cretacolor_CharBlenderImg, 80.00));
+        drawingToolsGrid.add(createProductCard("Derwent Blender Stumps", "3 pcs of blender stumps", "Stocks 20", receiptArea, Derwent_BStumpsImg, 90.00));
+        drawingToolsGrid.add(createProductCard("Prisma color Color Blender", "3 pcs clor blender", "Stocks 20", receiptArea, Prismacolor_CBlenderImg, 120.00));
+        drawingToolsGrid.add(createProductCard("Sakura Eraser", "2 pcs of eraser", "Stocks 20", receiptArea, Sakura_EraserImg, 50.00));
+
 
         scrollContent.add(drawingToolsGrid);
         
@@ -186,16 +253,16 @@ public class Home {
         if (Sennelier_WCImg == null) Sennelier_WCImg = createPlaceholderIcon(210, 200);
         if ( WinsorandNewton_OPImg == null)  WinsorandNewton_OPImg = createPlaceholderIcon(210, 200);
         
-        paintingMaterialsGrid.add(createProductCard("Arteza Acrylic Paint", "10 pcs", "Stocks 20", receiptArea, Arteza_APImg, 100.00));
-        paintingMaterialsGrid.add(createProductCard("Daniel Smith Watercolor", "100 pcs", "Stocks 20", receiptArea, DanielSmith_WCImg, 90.00));
-        paintingMaterialsGrid.add(createProductCard("Golden Medium", "10 pcs", "Stocks 20", receiptArea, Golden_mediumImg, 110.00));
-        paintingMaterialsGrid.add(createProductCard("Liquitex Acrylic Paint", "10 pcs", "Stocks 20", receiptArea, Liquitex_APImg, 120.00));
-        paintingMaterialsGrid.add(createProductCard("Maimeri Classico Oilpaint", "10 pcs", "Stocks 20", receiptArea, Maimeri_ClassicoOPImg, 100.00));
-        paintingMaterialsGrid.add(createProductCard("Mijello Mission Gold Watercolor", "10 pcs", "Stocks 20", receiptArea, Mijello_MissionGoldWCImg, 150.00));
-        paintingMaterialsGrid.add(createProductCard("Pebeo Oilpaint", "10 pcs", "Stocks 20", receiptArea, Pebeo_OPImg, 95.00));
-        paintingMaterialsGrid.add(createProductCard("Royal Talents Rembrandt Oilpaint", "10 pcs", "Stocks 20", receiptArea, RoyalTalens_RembrandtOPImg, 180.00));
-        paintingMaterialsGrid.add(createProductCard("Sennelier Watercolor", "10 pcs", "Stocks 20", receiptArea, Sennelier_WCImg, 130.00));
-        paintingMaterialsGrid.add(createProductCard("Winson & Newton Oilpaint", "10 pcs", "Stocks 20", receiptArea, WinsorandNewton_OPImg, 105.00));
+        paintingMaterialsGrid.add(createProductCard("Arteza Acrylic Paint", "2 pcs of paint", "Stocks 20", receiptArea, Arteza_APImg, 100.00));
+        paintingMaterialsGrid.add(createProductCard("Daniel Smith Watercolor", "5 pcs of watercolor", "Stocks 20", receiptArea, DanielSmith_WCImg, 90.00));
+        paintingMaterialsGrid.add(createProductCard("Golden Medium", "10 pcs of medium", "Stocks 20", receiptArea, Golden_mediumImg, 110.00));
+        paintingMaterialsGrid.add(createProductCard("Liquitex Acrylic Paint", "10 pcs of acrylic paint", "Stocks 20", receiptArea, Liquitex_APImg, 120.00));
+        paintingMaterialsGrid.add(createProductCard("Maimeri Classico Oilpaint", "12 pcs of oilpaint", "Stocks 20", receiptArea, Maimeri_ClassicoOPImg, 100.00));
+        paintingMaterialsGrid.add(createProductCard("Mijello Mission Gold Watercolor", "30 pcs of watercolor", "Stocks 20", receiptArea, Mijello_MissionGoldWCImg, 150.00));
+        paintingMaterialsGrid.add(createProductCard("Pebeo Oilpaint", "7 pcs of oilpaint", "Stocks 20", receiptArea, Pebeo_OPImg, 95.00));
+        paintingMaterialsGrid.add(createProductCard("Royal Talents Rembrandt Oilpaint", "10 pcs of oilpaint", "Stocks 20", receiptArea, RoyalTalens_RembrandtOPImg, 180.00));
+        paintingMaterialsGrid.add(createProductCard("Sennelier Watercolor", "5 pcs of watercolor", "Stocks 20", receiptArea, Sennelier_WCImg, 130.00));
+        paintingMaterialsGrid.add(createProductCard("Winson & Newton Oilpaint", "10 pcs of oilpaint", "Stocks 20", receiptArea, WinsorandNewton_OPImg, 105.00));
 
         scrollContent.add(paintingMaterialsGrid);
         
@@ -206,8 +273,7 @@ public class Home {
         paintingToolsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         scrollContent.add(paintingToolsLabel);
 
-        JPanel paintingToolsGrid = new JPanel(new GridLayout(0, 5, 20, 20));
-        paintingToolsGrid.setOpaque(false);
+        JPanel paintingToolsGrid = new JPanel(new GridLayout(0, 5, 20, 20));        paintingToolsGrid.setOpaque(false);
         
         ImageIcon GamblinGamvarVarnishBrushImg = loadAndResizeResourceImage("/furniture/Gamblin Gamvar_Varnish Brush.jpg", 210, 200);
         ImageIcon Liquitex_PKImg = loadAndResizeResourceImage("/furniture/Liquitex_PK.jpg", 210, 200);
@@ -228,14 +294,15 @@ public class Home {
         if (RGM_WoodenPKImg == null) RGM_WoodenPKImg = createPlaceholderIcon(210, 200);
         if (SilverBrushGrandPrix_BristleBrushImg == null) SilverBrushGrandPrix_BristleBrushImg = createPlaceholderIcon(210, 200);
         
-        paintingToolsGrid.add(createProductCard("Gamblin Gamvar Varnish Brush", "10 pcs", "Stocks 20", receiptArea, GamblinGamvarVarnishBrushImg, 100.00));
-        paintingToolsGrid.add(createProductCard("Liquitex Pallete Knives", "10 pcs", "Stocks 20", receiptArea, Liquitex_PKImg, 130.00));
-        paintingToolsGrid.add(createProductCard("Mabef Easel", "100 pcs", "Stocks 20", receiptArea, Mabef_easelImg, 160.00));
-        paintingToolsGrid.add(createProductCard("Mimik Brush", "10 pcs", "Stocks 20", receiptArea, Mimik_BrushImg, 120.00));
-        paintingToolsGrid.add(createProductCard("Paasche Airbrush", "10 pcs", "Stocks 20", receiptArea, Paasche_AirbrushImg, 200.00));
-        paintingToolsGrid.add(createProductCard("Princeton Velvetouch Brush", "10 pcs", "Stocks 20", receiptArea, Princeton_VelvetouchBrushImg, 160.00));
-        paintingToolsGrid.add(createProductCard("RGM Wooden Pallete Knives", "10 pcs", "Stocks 20", receiptArea, RGM_WoodenPKImg, 100.00));
-        paintingToolsGrid.add(createProductCard("Silver Brush Grand Prix Bristle Brush", "10 pcs", "Stocks 20", receiptArea, SilverBrushGrandPrix_BristleBrushImg, 145.00));
+        paintingToolsGrid.add(createProductCard("Gamblin Gamvar Varnish Brush", "2 pcs of brush", "Stocks 20", receiptArea, GamblinGamvarVarnishBrushImg, 100.00));
+        paintingToolsGrid.add(createProductCard("Liquitex Pallete Knives", "4 pcs of pallete knives", "Stocks 20", receiptArea, Liquitex_PKImg, 130.00));
+        paintingToolsGrid.add(createProductCard("Mabef Easel", "1 pcs of easel", "Stocks 20", receiptArea, Mabef_easelImg, 160.00));
+        paintingToolsGrid.add(createProductCard("Mimik Brush", "5 pcs of brush", "Stocks 20", receiptArea, Mimik_BrushImg, 120.00));
+        paintingToolsGrid.add(createProductCard("Paasche Airbrush", "1 pcs of airbrush", "Stocks 20", receiptArea, Paasche_AirbrushImg, 200.00));
+        paintingToolsGrid.add(createProductCard("Princeton Velvetouch Brush", "4 pcs of brush", "Stocks 20", receiptArea, Princeton_VelvetouchBrushImg, 160.00));
+        paintingToolsGrid.add(createProductCard("RGM Wooden Pallete Knives", "15 pcs of brush", "Stocks 20", receiptArea, RGM_WoodenPKImg, 100.00));
+        paintingToolsGrid.add(createProductCard("Silver Brush Grand Prix Bristle Brush", "13 pcs of brush", "Stocks 20", receiptArea, SilverBrushGrandPrix_BristleBrushImg, 145.00));
+
 
         scrollContent.add(paintingToolsGrid);
         
@@ -334,9 +401,12 @@ public class Home {
     }
 
     private static JPanel createProductCard(String title, String description, String stockStr, JTextArea receiptArea, ImageIcon image, double price) {
+        // Parse the stock value from the string
         int initialStock = Integer.parseInt(stockStr.replaceAll("[^0-9]", ""));
+        // Create a new Product object using the constructor
         Product product = new Product(title, description, initialStock);
 
+        // Create a new JPanel to represent the product card
         JPanel card = new JPanel(new BorderLayout());
         card.setPreferredSize(new Dimension(230, 280));
         card.setBackground(new Color(0xD3E4CD));
@@ -345,24 +415,28 @@ public class Home {
                 BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1)
         ));
 
+        // Add product image to the card
         JLabel imageLabel = new JLabel(image);
         imageLabel.setHorizontalAlignment(JLabel.CENTER);
         imageLabel.setPreferredSize(new Dimension(125, 125));
         card.add(imageLabel, BorderLayout.NORTH);
 
+        // Create a panel for product information
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setBackground(new Color(0xD3E4CD));
 
+        // Add product details to the info panel
         JLabel priceLabel = new JLabel(String.format("₱ %.2f", price));
         JLabel titleLabel = new JLabel(title);
         JLabel descLabel = new JLabel(description);
-        JLabel stockLabel = new JLabel("Stocks " + product.stock);
-        JSpinner quantitySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 90, 1));
+        JLabel stockLabel = new JLabel("Stocks " + product.getStock()); // Use the getter method for stock
+        JSpinner quantitySpinner = new JSpinner(new SpinnerNumberModel(1, 1, product.getStock(), 1));
         quantitySpinner.setMaximumSize(new Dimension(50, 25));
 
         JButton addButton = new JButton("Buy");
 
+        // Set alignment for all components
         priceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         descLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -370,6 +444,7 @@ public class Home {
         quantitySpinner.setAlignmentX(Component.CENTER_ALIGNMENT);
         addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // Style the "Buy" button
         addButton.setBackground(new Color(0xFFA725));
         addButton.setForeground(Color.BLACK);
         addButton.setFocusPainted(false);
@@ -377,10 +452,17 @@ public class Home {
         // Action for adding items to the cart
         addButton.addActionListener(e -> {
             int quantity = (Integer) quantitySpinner.getValue();
+            if (quantity > product.getStock()) {
+                JOptionPane.showMessageDialog(null, "Not enough stock available!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             Purchase.addPurchase(new Purchase(title, quantity, price, "NONE"));
             receiptArea.append(title + " x" + quantity + " | ₱ " + String.format("%.2f", price * quantity) + "\n");
+            product.setStock(product.getStock() - quantity); // Update stock after purchase
+            stockLabel.setText("Stocks " + product.getStock());
         });
 
+        // Add components to the info panel
         infoPanel.add(Box.createVerticalStrut(3));
         infoPanel.add(priceLabel);
         infoPanel.add(titleLabel);
@@ -391,7 +473,9 @@ public class Home {
         infoPanel.add(Box.createVerticalStrut(5));
         infoPanel.add(addButton);
 
+        // Add the info panel to the card
         card.add(infoPanel, BorderLayout.CENTER);
+
         return card;
     }
 
